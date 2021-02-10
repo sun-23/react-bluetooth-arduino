@@ -4,8 +4,8 @@ import "./App.css";
 const SEND_SERVICE = 0xFFE0;
 const SEND_SERVICE_CHARACTERISTIC = 0xFFE1;
 
-const array = [
-  0,1,2,3,4,5,6,7,8,9
+const array_block = [
+  0,1,2,3,4,5,6,7,8,9,10
 ]
 
 function App() {
@@ -65,6 +65,10 @@ function App() {
     setCommand('');
   }
 
+  const code_block = array_block.map((id) => 
+    <div className='box'><p>{id}</p></div>
+  );
+
   return (
     <div className='App'>
       <h1>device: { device ? device.name : 'no device' }</h1>
@@ -74,16 +78,9 @@ function App() {
       <button onClick={off} data-code="0" className='button'>off</button>
 
       <div className='code'>
-        <div className='box'><p>1</p></div>
-        <div className='box'><p>2</p></div>
-        <div className='box'><p>3</p></div>
-        <div className='box'><p>4</p></div>
-        <div className='box'><p>5</p></div>
-        <div className='box'><p>6</p></div>
-        <div className='box'><p>7</p></div>
-        <div className='box'><p>8</p></div>
-        <div className='box'><p>9</p></div>
-        <div className='box'><p>10</p></div>
+        {array_block.map((id) => 
+          <div className='box'><p>{id}</p></div>
+        )}
       </div>
 
       <div className='code'>
