@@ -60,15 +60,13 @@ function App() {
       <button onClick={on} data-code="1">on</button>
       <button onClick={off} data-code="0">off</button>
       <form onSubmit={send_command}>
-        <label htmlFor='firstName'>Name : </label>
-            <input
-              type='text'
-              id='firstName'
-              name='command'
-              value={command}
-              onChange={(e) => setCommand(e.target.value)}
-            />
-            <button type='submit'>send command</button>
+        <input
+          type='text'
+          name='command'
+          value={command}
+          onChange={(e) => setCommand(e.target.value)}
+        />
+        <button type='submit'>send command</button>
       </form>
     </div>
   );
