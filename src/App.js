@@ -4,6 +4,10 @@ import "./App.css";
 const SEND_SERVICE = 0xFFE0;
 const SEND_SERVICE_CHARACTERISTIC = 0xFFE1;
 
+const array = [
+  0,1,2,3,4,5,6,7,8,9
+]
+
 function App() {
 
   const [ character, set_characteristic] = useState();
@@ -63,22 +67,43 @@ function App() {
 
   return (
     <div className='App'>
-      <h1>device: { device ? device.name : 'nodevice' }</h1>
-      <div className='Control'>
-        <button onClick={() => request_device()} className='button'>connect</button>
-        <button onClick={() => disconnect()} className='button'>disconnect</button>
-        <button onClick={on} data-code="1" className='button'>on</button>
-        <button onClick={off} data-code="0" className='button'>off</button>
-        <form onSubmit={send_command}>
-          <input
-            type='text'
-            name='command'
-            value={command}
-            onChange={(e) => setCommand(e.target.value)}
-          />
-          <button type='submit'>send command</button>
-        </form>
+      <h1>device: { device ? device.name : 'no device' }</h1>
+      <button onClick={() => request_device()} className='button'>connect</button>
+      <button onClick={() => disconnect()} className='button'>disconnect</button>
+      <button onClick={on} data-code="1" className='button'>on</button>
+      <button onClick={off} data-code="0" className='button'>off</button>
+
+      <div className='code'>
+        <div className='box'><p>1</p></div>
+        <div className='box'><p>2</p></div>
+        <div className='box'><p>3</p></div>
+        <div className='box'><p>4</p></div>
+        <div className='box'><p>5</p></div>
+        <div className='box'><p>6</p></div>
+        <div className='box'><p>7</p></div>
+        <div className='box'><p>8</p></div>
+        <div className='box'><p>9</p></div>
+        <div className='box'><p>10</p></div>
       </div>
+
+      <div className='code'>
+        <div className='box f'><p>forward</p></div>
+        <div className='box l'><p>left</p></div>
+        <div className='box r'><p>right</p></div>
+        <div className='box b'><p>backward</p></div>
+        <button className='button'> run </button>
+      </div>
+
+      <form onSubmit={send_command}>
+        <input
+          type='text'
+          name='command'
+          value={command}
+          className='text-input'
+          onChange={(e) => setCommand(e.target.value)}
+        />
+        <button type='submit' className='button'>send command</button>
+      </form>
     </div>
   );
 }

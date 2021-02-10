@@ -1,20 +1,77 @@
+* {
+    box-sizing: border-box;
+    padding: 0;
+    margin: 0;
+}
+
+
 .App {
-    background-color: #282c34;
-    color: white;
-    padding: 40px;
+    padding: 20px;
+    background-color: #d3e0ea;
     font-family: Arial;
     text-align: center;
 }
 
-.Control {
-
+.button {
+    font-size: 18px;
+    height: auto;
+    width: auto;
+    border-radius: 10px;
+    padding-top: 10px;
+    padding-bottom: 10px;
+    padding-left: 20px;
+    padding-right: 20px;
+    background: #f2f6f5;
+    text-transform: uppercase;
+    font-weight: 700;
+    margin: 30px;
 }
 
-.button {
-    margin: 30px;
-    font-size: 18px;
-    height: 50px;
-    width: 120px;
+.text-input {
+    height: 30px;
+    width: 200px;
+    padding-left: 20px;
+    padding-right: 20px;
+    border-radius: 20px;
+}
+
+.code {
+    display: flex;
+    justify-content: flex-start;
+    flex-wrap: wrap;
+}
+
+.box {
+    width: 150px;
+    height: 150px;
     border-radius: 10px;
-    background: #f2f6f5;
+    background: #ffffff;
+    margin: 20px;
+}
+
+.box p {
+    margin: 0;
+    padding: 0;
+    color: black;
+    text-transform: uppercase;
+    font-weight: 700;
+    text-align: center;
+    position: relative;
+    top: 50%;
+}
+
+.f {
+    background: #ffb3b3;
+}
+
+.l {
+    background: #b6ffea;
+}
+
+.r {
+    background: #fce2ae;
+}
+
+.b {
+    background: #ffdcf7;
 }
