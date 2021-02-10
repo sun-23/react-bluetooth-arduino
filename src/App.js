@@ -34,13 +34,21 @@ function App() {
   function on(event){
     const code = Number(event.target.dataset.code);
     console.log(code);
-    character.writeValue(Uint8Array.of(code));
+    if(character){
+      character.writeValue(Uint8Array.of(code));
+    }else{
+      alert('no device connected.')
+    }
   }
 
   function off(event){
     const code = Number(event.target.dataset.code);
     console.log(code);
-    character.writeValue(Uint8Array.of(code));
+    if(character){
+      character.writeValue(Uint8Array.of(code));
+    }else{
+      alert('no device connected.')
+    }
   }
   
   function send_command(e){
