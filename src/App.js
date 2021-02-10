@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import "./App.css";
 
 const SEND_SERVICE = 0xFFE0;
 const SEND_SERVICE_CHARACTERISTIC = 0xFFE1;
@@ -61,21 +62,23 @@ function App() {
   }
 
   return (
-    <div>
+    <div className='App'>
       <h1>device: { device ? device.name : 'nodevice' }</h1>
-      <button onClick={() => request_device()}>connect</button>
-      <button onClick={() => disconnect()}>disconnect</button>
-      <button onClick={on} data-code="1">on</button>
-      <button onClick={off} data-code="0">off</button>
-      <form onSubmit={send_command}>
-        <input
-          type='text'
-          name='command'
-          value={command}
-          onChange={(e) => setCommand(e.target.value)}
-        />
-        <button type='submit'>send command</button>
-      </form>
+      <div className='Control'>
+        <button onClick={() => request_device()} className='button'>connect</button>
+        <button onClick={() => disconnect()} className='button'>disconnect</button>
+        <button onClick={on} data-code="1" className='button'>on</button>
+        <button onClick={off} data-code="0" className='button'>off</button>
+        <form onSubmit={send_command}>
+          <input
+            type='text'
+            name='command'
+            value={command}
+            onChange={(e) => setCommand(e.target.value)}
+          />
+          <button type='submit'>send command</button>
+        </form>
+      </div>
     </div>
   );
 }
