@@ -27,6 +27,21 @@
     margin: 30px;
 }
 
+.run-button {
+    font-size: 18px;
+    height: 60px;
+    width: 150px;
+    border-radius: 10px;
+    padding-top: 10px;
+    padding-bottom: 10px;
+    padding-left: 20px;
+    padding-right: 20px;
+    background: #ffffff;
+    text-transform: uppercase;
+    font-weight: 700;
+    margin: 30px;
+}
+
 .text-input {
     height: 30px;
     width: 200px;
@@ -39,6 +54,15 @@
     display: flex;
     justify-content: flex-start;
     flex-wrap: wrap;
+}
+
+.code-block {
+    display: flex;
+    justify-content: flex-start;
+    flex-wrap: wrap;
+    padding: 20px;
+    border-radius: 20px;
+    background-color: cornflowerblue;
 }
 
 .box {
@@ -57,7 +81,7 @@
     font-weight: 700;
     text-align: center;
     position: relative;
-    top: 50%;
+    top: 45%;
 }
 
 .f {
@@ -74,4 +98,8 @@
 
 .b {
     background: #ffdcf7;
+}
+
+.draggable {
+    cursor: move;
 }

@@ -1,11 +1,12 @@
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
+import DeleteOutlineRoundedIcon from '@material-ui/icons/DeleteOutlineRounded';
 import "./App.css";
 
 const SEND_SERVICE = 0xFFE0;
 const SEND_SERVICE_CHARACTERISTIC = 0xFFE1;
 
 const array_block = [
-  0,1,2,3,4,5,6,7,8,9,10
+  1,2,3,4,5,6,7,8,9,10
 ]
 
 function App() {
@@ -13,6 +14,11 @@ function App() {
   const [ character, set_characteristic] = useState();
   const [ device , setDevice ] = useState();
   const [ command, setCommand ] = useState();
+
+  const forwardRef = useRef(null);
+  const leftRef = useRef(null);
+  const rightRef = useRef(null);
+  const backwardRef = useRef(null);
 
   const request_device = async () => {
     const device = await navigator.bluetooth
@@ -61,13 +67,25 @@ function App() {
     let enc = new TextEncoder(); // By default this encodes to utf-8
     // Why the <opening and closing> characters?
     // Went with this guy's example 3 for the reasons he mentions: https://forum.arduino.cc/index.php?topic=396450.0
-    character.writeValue(enc.encode(`${command}`));
+    if(character){
+      character.writeValue(enc.encode(`<${command}>`));
+    }else{
+      alert('no device connected.')
+    }
     setCommand('');
   }
 
-  const code_block = array_block.map((id) => 
-    <div className='box'><p>{id}</p></div>
-  );
+  const onDragStart = (e) => {
+    console.log(e.target);
+  }
+
+  const onDragEnd = () => {
+    console.log('drag end');
+  }
+
+  const onDragOver = () => {
+    console.log('drag over');
+  }
 
   return (
     <div className='App'>
@@ -76,21 +94,6 @@ function App() {
       <button onClick={() => disconnect()} className='button'>disconnect</button>
       <button onClick={on} data-code="1" className='button'>on</button>
       <button onClick={off} data-code="0" className='button'>off</button>
-
-      <div className='code'>
-        {array_block.map((id) => 
-          <div className='box'><p>{id}</p></div>
-        )}
-      </div>
-
-      <div className='code'>
-        <div className='box f'><p>forward</p></div>
-        <div className='box l'><p>left</p></div>
-        <div className='box r'><p>right</p></div>
-        <div className='box b'><p>backward</p></div>
-        <button className='button'> run </button>
-      </div>
-
       <form onSubmit={send_command}>
         <input
           type='text'
@@ -101,6 +104,62 @@ function App() {
         />
         <button type='submit' className='button'>send command</button>
       </form>
+
+      <div className='code'>
+        {array_block.map((id) => 
+          <div 
+            className='box'
+            onDragOver={onDragOver}
+          ><p>
+            {id}
+          </p></div>
+        )}
+      </div>
+
+      <div className='code-block'>
+        <div 
+          ref={forwardRef} 
+          className='box f draggable' 
+          draggable='true' 
+          value='forwardRef'
+          onDragStart={onDragStart}
+          onDragEnd={onDragEnd}
+        ><p>
+          forward
+        </p></div>
+        <div 
+          ref={leftRef} 
+          className='box l draggable' 
+          draggable='true' 
+          value='leftRef'
+          onDragStart={onDragStart}
+          onDragEnd={onDragEnd}
+        ><p>
+          left
+        </p></div>
+        <div 
+          ref={rightRef} 
+          className='box r draggable' 
+          draggable='true' 
+          value='rightRef'
+          onDragStart={onDragStart}
+          onDragEnd={onDragEnd}
+        ><p>
+          right
+        </p></div>
+        <div 
+          ref={backwardRef} 
+          className='box b draggable' 
+          draggable='true' 
+          value='backwardRef'
+          onDragStart={onDragStart}
+          onDragEnd={onDragEnd}
+        ><p>
+          backward
+        </p></div>
+        <button className='run-button'> run </button>
+        <div className='box'><p><DeleteOutlineRoundedIcon/></p></div>
+      </div>
     </div>
   );
 }
