@@ -238,8 +238,8 @@ function App() {
         <h1>device: { device ? device.name : 'no device' }</h1>
         <button onClick={() => request_device()} className='button'>connect</button>
         <button onClick={() => disconnect()} className='button'>disconnect</button>
-        <button onClick={send01} data-code="1" className='button'>on</button>
-        <button onClick={send01} data-code="0" className='button'>off</button>
+        <button onClick={send01} data-code="1" className='button'>on led</button>
+        <button onClick={send01} data-code="0" className='button'>off led</button>
         <form onSubmit={send_command}>
           <input
             type='text'
