@@ -1,13 +1,64 @@
-import React, { useState, useRef } from 'react';
+import React, { useState, Component } from 'react';
 import DeleteOutlineRoundedIcon from '@material-ui/icons/DeleteOutlineRounded';
 import "./App.css";
+import { v4 as uuid } from 'uuid';
+import styled from 'styled-components';
+import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd';
+// npm install react-beautiful-dnd@10.0.4 --force
+// npm install styled-components@3.4.9 --force
 
 const SEND_SERVICE = 0xFFE0;
 const SEND_SERVICE_CHARACTERISTIC = 0xFFE1;
 
 const array_block = [
-  1,2,3,4,5,6,7,8,9,10
+  1,2,3,4,5,6,7
 ]
+
+const OBJ_BLOCKS = {
+  [uuid()] : [],
+  [uuid()] : [],
+  [uuid()] : [],
+  [uuid()] : [],
+  [uuid()] : [],
+  [uuid()] : [],
+}
+
+const COMMANDS = [
+  {
+    id: uuid(),
+    content: 'forward',
+    class_name: 'box f draggable'
+  },
+  {
+    id: uuid(),
+    content: 'left',
+    class_name: 'box l draggable'
+  },
+  {
+    id: uuid(),
+    content: 'right',
+    class_name: 'box r draggable'
+  },
+  {
+    id: uuid(),
+    content: 'backward',
+    class_name: 'box b draggable'
+  }
+]
+
+const move = (source, destination, droppableSource, droppableDestination) => {
+  const sourceClone = Array.from(source);
+  const destClone = Array.from(destination);
+  const [removed] = sourceClone.splice(droppableSource.index, 1);
+
+  destClone.splice(droppableDestination.index, 0, removed);
+
+  const result = {};
+  result[droppableSource.droppableId] = sourceClone;
+  result[droppableDestination.droppableId] = destClone;
+
+  return result;
+};
 
 function App() {
 
@@ -15,10 +66,7 @@ function App() {
   const [ device , setDevice ] = useState();
   const [ command, setCommand ] = useState();
 
-  const forwardRef = useRef(null);
-  const leftRef = useRef(null);
-  const rightRef = useRef(null);
-  const backwardRef = useRef(null);
+  const [obj_blocks, set_obj_blocks] = useState(OBJ_BLOCKS);
 
   const request_device = async () => {
     const device = await navigator.bluetooth
@@ -75,92 +123,172 @@ function App() {
     setCommand('');
   }
 
-  const onDragStart = (e) => {
-    console.log(e.target);
-  }
+  const onDragEnd = result => {
+    const { source, destination } = result;
 
-  const onDragEnd = () => {
-    console.log('drag end');
-  }
+    // dropped outside the list
+    if (!destination) {
+      return;
+    }
 
-  const onDragOver = () => {
-    console.log('drag over');
-  }
+    const resultfvp = result;
+
+    console.log('==> result', resultfvp);
+
+    const dest = destination
+    console.log('==> dest in log', dest.droppableId);
+
+    const soc = source
+    console.log('==> source in log', soc.droppableId);
+
+    switch (source.droppableId) {
+      case 'ITEMS':
+        if(dest.droppableId !== "TRASH"){
+          console.log('copy');
+          const item = COMMANDS[source.index] 
+          const copy_item = {...item, ["id"]: uuid()} //copy
+          set_obj_blocks({
+            ...obj_blocks,
+            [dest.droppableId]: [copy_item]
+          })
+          console.log('item ', item);
+          console.log('new item ',copy_item);
+        } else {
+          console.log('not copy');
+        }
+        break;
+      default:
+        if(dest.droppableId !== "TRASH"){
+          console.log('move');
+          const soc_id = soc.droppableId
+          const move_item = obj_blocks[soc_id][soc.index]
+          console.log('soc id', soc_id);
+          console.log('dest ', move_item);
+          set_obj_blocks({
+            ...obj_blocks,
+            [soc.droppableId] : [],
+            [dest.droppableId] : [move_item]
+          })
+          // const result = move(obj_blocks[soc.droppableId],obj_blocks[dest.droppableId],soc,dest)
+          // console.log(result);
+          // set_obj_blocks({
+          //   ...obj_blocks,
+          //   ...result
+          // })
+        } else {
+          console.log("trash");
+          set_obj_blocks({
+            ...obj_blocks,
+            [soc.droppableId] : []
+          })
+        }
+        break;
+    }
+    console.log('obj', obj_blocks);
+  };
 
   return (
-    <div className='App'>
-      <h1>device: { device ? device.name : 'no device' }</h1>
-      <button onClick={() => request_device()} className='button'>connect</button>
-      <button onClick={() => disconnect()} className='button'>disconnect</button>
-      <button onClick={on} data-code="1" className='button'>on</button>
-      <button onClick={off} data-code="0" className='button'>off</button>
-      <form onSubmit={send_command}>
-        <input
-          type='text'
-          name='command'
-          value={command}
-          className='text-input'
-          onChange={(e) => setCommand(e.target.value)}
-        />
-        <button type='submit' className='button'>send command</button>
-      </form>
+      <DragDropContext onDragEnd={result => onDragEnd(result)}>
+        <div className='App'>
+        <h1>device: { device ? device.name : 'no device' }</h1>
+        <button onClick={() => request_device()} className='button'>connect</button>
+        <button onClick={() => disconnect()} className='button'>disconnect</button>
+        <button onClick={on} data-code="1" className='button'>on</button>
+        <button onClick={off} data-code="0" className='button'>off</button>
+        <form onSubmit={send_command}>
+          <input
+            type='text'
+            name='command'
+            value={command}
+            className='text-input'
+            onChange={(e) => setCommand(e.target.value)}
+          />
+          <button type='submit' className='button'>send command</button>
+        </form>
+        <div className='code'>
+        {Object.keys(obj_blocks).map((list, i) => {
+          return (
+            <Droppable key={list} droppableId={list}>
+              {(provided, snapshot) => (
+                <div 
+                  className='box-code'
+                  ref={provided.innerRef}
+                  isDraggingOver={snapshot.isDraggingOver}
+                ><p>
+                  {/* {list} */}
+                  {i}
+                  {undefined !== obj_blocks[list] && obj_blocks[list].length
+                  ? obj_blocks[list].map(
+                    (item, index) => (
+                      <Draggable 
+                        key={item.id}
+                        draggableId={item.id}
+                        index={index}>
+                        {(provided, snapshot) => (
+                          <div
+                            ref={provided.innerRef}
+                            {...provided.draggableProps}
+                            {...provided.dragHandleProps}
+                            isDragging={snapshot.isDragging}
+                            className={item.class_name} 
+                          ><p>
+                            {item.content}
+                          </p></div>
+                        )}
+                      </Draggable>
+                    )
+                  ) : !provided.placeholder && (
+                    <p> Drop code here </p>
+                  )}
+                </p></div>
+              )}
+            </Droppable>
+          )
+        })}
+        </div>
 
-      <div className='code'>
-        {array_block.map((id) => 
-          <div 
-            className='box'
-            onDragOver={onDragOver}
-          ><p>
-            {id}
-          </p></div>
-        )}
-      </div>
-
-      <div className='code-block'>
-        <div 
-          ref={forwardRef} 
-          className='box f draggable' 
-          draggable='true' 
-          value='forwardRef'
-          onDragStart={onDragStart}
-          onDragEnd={onDragEnd}
-        ><p>
-          forward
-        </p></div>
-        <div 
-          ref={leftRef} 
-          className='box l draggable' 
-          draggable='true' 
-          value='leftRef'
-          onDragStart={onDragStart}
-          onDragEnd={onDragEnd}
-        ><p>
-          left
-        </p></div>
-        <div 
-          ref={rightRef} 
-          className='box r draggable' 
-          draggable='true' 
-          value='rightRef'
-          onDragStart={onDragStart}
-          onDragEnd={onDragEnd}
-        ><p>
-          right
-        </p></div>
-        <div 
-          ref={backwardRef} 
-          className='box b draggable' 
-          draggable='true' 
-          value='backwardRef'
-          onDragStart={onDragStart}
-          onDragEnd={onDragEnd}
-        ><p>
-          backward
-        </p></div>
+        <div className='code-block'>
+          <Droppable droppableId="ITEMS" isDropDisabled={true}>
+          {(provided, snapshot) => (
+            <div 
+              className='code-block'
+              ref={provided.innerRef}
+              isDraggingOver={snapshot.isDraggingOver}>
+              {COMMANDS.map((item, index) => (
+                <Draggable key={item.id} draggableId={item.id} index={index}>
+                  {(provided, snapshot) => (
+                    <React.Fragment>
+                      <div
+                        ref={provided.innerRef}
+                        {...provided.draggableProps}
+                        {...provided.dragHandleProps}
+                        isDragging={snapshot.isDragging}
+                        className={item.class_name} 
+                      ><p>
+                        {item.content}
+                      </p></div>
+                    </React.Fragment>
+                  )}
+                </Draggable>
+              ))}
+            </div>
+          )}
+        </Droppable>
         <button className='run-button'> run </button>
-        <div className='box'><p><DeleteOutlineRoundedIcon/></p></div>
-      </div>
-    </div>
+        <Droppable droppableId="TRASH">
+          {(provided, snapshot) => (
+            <div 
+              className='big-box' 
+              ref={provided.innerRef}
+              isDraggingOver={snapshot.isDraggingOver}
+            ><p>
+              <DeleteOutlineRoundedIcon/>
+            </p></div>
+          )}
+        </Droppable>
+        </div>
+        </div>
+      </DragDropContext>
   );
 }
 

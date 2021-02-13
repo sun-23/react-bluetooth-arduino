@@ -1,0 +1,70 @@
+<!DOCTYPE HTML>
+<html>
+
+<head>
+    <style>
+        #div1 {
+            width: 350px;
+            height: 70px;
+            padding: 10px;
+            border: 1px solid #aaaaaa;
+        }
+
+        .copy {
+            
+        }
+    </style>
+    <script>
+        //https://www.w3schools.com/code/tryit.asp?filename=GNKJCTH62HFW
+        function allowDrop(ev) {
+            ev.preventDefault();
+        }
+
+        function drag(ev) {
+            ev.target.id = Date.now()
+            ev.dataTransfer.setData("text", ev.target.id);
+        }
+
+        function drop(ev) {
+            ev.preventDefault();
+            console.log(ev);
+            var data = ev.dataTransfer.getData("text");
+            var cln = document.getElementById(data).cloneNode(true);
+            console.log(cln);
+            cln.className = "copy"
+            ev.target.appendChild(cln);
+        }
+
+        function droptrash(ev) {
+            ev.preventDefault();
+            var data = ev.dataTransfer.getData("text");
+            var cln = document.getElementById(data);
+            var class_name = cln.className;
+            console.log(cln);
+            console.log(class_name);
+            if (class_name == "copy") {
+                ev.target.appendChild(cln);
+                ev.target.removeChild(cln);
+            }
+        }
+    </script>
+</head>
+
+<body>
+
+    <p>Drag the W3Schools image into the rectangle:</p>
+
+    <div id="div1" ondrop="drop(event)" ondragover="allowDrop(event)"></div>
+    <div id="div1" ondrop="drop(event)" ondragover="allowDrop(event)"></div>
+    <div id="div1" ondrop="droptrash(event)" ondragover="allowDrop(event)"></div>
+    <br>
+    <img id="drag1"
+        src="https://www.ikea.com/us/en/images/products/bygglek-201-piece-lego-r-brick-set-mixed-colors__0915518_PE784785_S5.JPG?f=xxxl"
+        draggable="true" ondragstart="drag(event)" width="336" height="69">
+    <img id="drag2"
+        src="https://bucketimg.datanethosting.us/wp-content/uploads/20201028224959/ABD-Ramp-Six.jpg"
+        draggable="true" ondragstart="drag(event)" width="336" height="69">
+
+</body>
+
+</html>
