@@ -111,7 +111,11 @@ function App() {
     let enc = new TextEncoder(); 
     console.log(code);
     if(character){
-      character.writeValue(enc.encode(`<${code}>`));
+        character.writeValue(enc.encode(`<${code}>`)).then(() => {
+            alert('send code ok')
+        }).catch(() => {
+            alert('cannot send')
+        })
     }else{
       alert('no device connected.')
     }
@@ -123,7 +127,11 @@ function App() {
     // Why the <opening and closing> characters?
     // Went with this guy's example 3 for the reasons he mentions: https://forum.arduino.cc/index.php?topic=396450.0
     if(character){
-      character.writeValue(enc.encode(`<${command}>`));
+        character.writeValue(enc.encode(`<${command}>`)).then(() => {
+            alert('send code ok')
+        }).catch(() => {
+            alert('cannot send')
+        })
     }else{
       alert('no device connected.')
     }
