@@ -15,20 +15,20 @@ const SEND_SERVICE = 0xFFE0;
 const SEND_SERVICE_CHARACTERISTIC = 0xFFE1;
 
 const OBJ_BLOCKS = {
-  [uuid()] : {},
-  [uuid()] : {},
-  [uuid()] : {},
-  [uuid()] : {},
-  [uuid()] : {},
-  [uuid()] : {},
-  [uuid()] : {},
-  [uuid()] : {},
-  [uuid()] : {},
-  [uuid()] : {},
-  [uuid()] : {},
-  [uuid()] : {},
-  [uuid()] : {},
-  [uuid()] : {},
+  [uuid()] : [],
+  [uuid()] : [],
+  [uuid()] : [],
+  [uuid()] : [],
+  [uuid()] : [],
+  [uuid()] : [],
+  [uuid()] : [],
+  [uuid()] : [],
+  [uuid()] : [],
+  [uuid()] : [],
+  [uuid()] : [],
+  [uuid()] : [],
+  [uuid()] : [],
+  [uuid()] : [],
 }
 
 const COMMANDS = [
@@ -140,17 +140,17 @@ function App() {
     let enc = new TextEncoder();
     console.log('run', obj_blocks);
     // Object.keys(obj_blocks).map((list,index) => {
-    //   if(obj_blocks[list].id !== undefined){
-    //     console.log(`<${obj_blocks[list].content}>`);
+    //   if(obj_blocks[list][0] !== undefined){
+    //     console.log(`<${obj_blocks[list][0].content}>`);
     //   } else {
     //     console.log('<stop>');
     //   }
     // })
     if(character){
       Object.keys(obj_blocks).map((list,index) => {
-        if(obj_blocks[list].id !== undefined){
+        if(obj_blocks[list][0] !== undefined){
           console.log(obj_blocks[list][0].content);
-          character.writeValue(enc.encode(`<${obj_blocks[list].content}>`));
+          character.writeValue(enc.encode(`<${obj_blocks[list][0].content}>`));
         } else {
           console.log('stop');
           character.writeValue(enc.encode('<stop>'));
@@ -187,7 +187,7 @@ function App() {
           const copy_item = {...item, ["id"]: uuid()} //copy
           set_obj_blocks({
             ...obj_blocks,
-            [dest.droppableId]: copy_item
+            [dest.droppableId]: [copy_item]
           })
           console.log('item ', item);
           console.log('new item ',copy_item);
@@ -199,13 +199,13 @@ function App() {
         if(dest.droppableId !== "TRASH"){
           console.log('move');
           const soc_id = soc.droppableId
-          const move_item = obj_blocks[soc_id]
+          const move_item = obj_blocks[soc_id][soc.index]
           console.log('soc id', soc_id);
           console.log('dest ', move_item);
           set_obj_blocks({
             ...obj_blocks,
             [soc.droppableId] : [],
-            [dest.droppableId] : move_item
+            [dest.droppableId] : [move_item]
           })
           // const result = move(obj_blocks[soc.droppableId],obj_blocks[dest.droppableId],soc,dest)
           // console.log(result);
@@ -255,27 +255,29 @@ function App() {
                 ><p>
                   {/* {list} */}
                   {i}
-                  {undefined !== obj_blocks[list] && obj_blocks[list].id
-                  ? (
+                  {undefined !== obj_blocks[list] && obj_blocks[list].length
+                  ? obj_blocks[list].map(
+                    (item, index) => (
                       <Draggable 
-                        key={obj_blocks[list].id}
-                        draggableId={obj_blocks[list].id}
-                        index={0}>
+                        key={item.id}
+                        draggableId={item.id}
+                        index={index}>
                         {(provided, snapshot) => (
                           <div
                             ref={provided.innerRef}
                             {...provided.draggableProps}
                             {...provided.dragHandleProps}
                             isDragging={snapshot.isDragging}
-                            className={obj_blocks[list].class_name} 
+                            className={item.class_name} 
                           >
-                            {obj_blocks[list].icon}
+                            {item.icon}
                             <p>
-                              {obj_blocks[list].content}
+                              {item.content}
                             </p>
                           </div>
                         )}
                       </Draggable>
+                    )
                   ) : !provided.placeholder && (
                     <p> Default stop block </p>
                   )}
