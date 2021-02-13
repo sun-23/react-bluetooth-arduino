@@ -1,9 +1,13 @@
 import React, { useState, Component } from 'react';
-import DeleteOutlineRoundedIcon from '@material-ui/icons/DeleteOutlineRounded';
 import "./App.css";
 import { v4 as uuid } from 'uuid';
 import styled from 'styled-components';
 import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd';
+import DeleteOutlineRoundedIcon from '@material-ui/icons/DeleteOutlineRounded';
+import LeftIcon from '@material-ui/icons/ArrowBackRounded';
+import BackwardIcon from '@material-ui/icons/ArrowDownwardRounded';
+import ForwardIcon from '@material-ui/icons/ArrowUpwardRounded';
+import RightIcon from '@material-ui/icons/ArrowForwardRounded';
 // npm install react-beautiful-dnd@10.0.4 --force
 // npm install styled-components@3.4.9 --force
 
@@ -17,28 +21,40 @@ const OBJ_BLOCKS = {
   [uuid()] : [],
   [uuid()] : [],
   [uuid()] : [],
+  [uuid()] : [],
+  [uuid()] : [],
+  [uuid()] : [],
+  [uuid()] : [],
+  [uuid()] : [],
+  [uuid()] : [],
+  [uuid()] : [],
+  [uuid()] : [],
 }
 
 const COMMANDS = [
   {
     id: uuid(),
     content: 'forward',
-    class_name: 'box f draggable'
+    class_name: 'box f draggable',
+    icon: <ForwardIcon fontSize="large"/>
   },
   {
     id: uuid(),
     content: 'left',
-    class_name: 'box l draggable'
+    class_name: 'box l draggable',
+    icon: <LeftIcon fontSize="large"/>
   },
   {
     id: uuid(),
     content: 'right',
-    class_name: 'box r draggable'
+    class_name: 'box r draggable',
+    icon: <RightIcon fontSize="large"/>
   },
   {
     id: uuid(),
     content: 'backward',
-    class_name: 'box b draggable'
+    class_name: 'box b draggable',
+    icon: <BackwardIcon fontSize="large"/>
   }
 ]
 
@@ -119,6 +135,32 @@ function App() {
     setCommand('');
   }
 
+  function run(e) {
+    e.preventDefault();
+    let enc = new TextEncoder();
+    console.log('run', obj_blocks);
+    // Object.keys(obj_blocks).map((list,index) => {
+    //   if(obj_blocks[list][0] !== undefined){
+    //     console.log(`<${obj_blocks[list][0].content}>`);
+    //   } else {
+    //     console.log('<stop>');
+    //   }
+    // })
+    if(character){
+      Object.keys(obj_blocks).map((list,index) => {
+        if(obj_blocks[list][0] !== undefined){
+          console.log(obj_blocks[list][0].content);
+          character.writeValue(enc.encode(`<${obj_blocks[list][0].content}>`));
+        } else {
+          console.log('stop');
+          character.writeValue(enc.encode('<stop>'));
+        }
+      })
+    }else{
+      alert('no device connected.')
+    }
+  }
+
   const onDragEnd = result => {
     const { source, destination } = result;
 
@@ -191,7 +233,7 @@ function App() {
         <button onClick={() => disconnect()} className='button'>disconnect</button>
         <button onClick={on} data-code="1" className='button'>on</button>
         <button onClick={off} data-code="0" className='button'>off</button>
-        <form onSubmit={send_command}>
+        {/* <form onSubmit={send_command}>
           <input
             type='text'
             name='command'
@@ -200,7 +242,7 @@ function App() {
             onChange={(e) => setCommand(e.target.value)}
           />
           <button type='submit' className='button'>send command</button>
-        </form>
+        </form> */}
         <div className='code'>
         {Object.keys(obj_blocks).map((list, i) => {
           return (
@@ -228,13 +270,13 @@ function App() {
                             isDragging={snapshot.isDragging}
                             className={item.class_name} 
                           ><p>
-                            {item.content}
+                            {item.icon}
                           </p></div>
                         )}
                       </Draggable>
                     )
                   ) : !provided.placeholder && (
-                    <p> Drop code here </p>
+                    <p> Default stop block </p>
                   )}
                 </p></div>
               )}
@@ -261,7 +303,7 @@ function App() {
                         isDragging={snapshot.isDragging}
                         className={item.class_name} 
                       ><p>
-                        {item.content}
+                        {item.icon}
                       </p></div>
                     </React.Fragment>
                   )}
@@ -270,7 +312,7 @@ function App() {
             </div>
           )}
         </Droppable>
-        <button className='run-button'> run </button>
+        <button className='run-button' onClick={run}> run </button>
         <Droppable droppableId="TRASH">
           {(provided, snapshot) => (
             <div 
@@ -278,7 +320,7 @@ function App() {
               ref={provided.innerRef}
               isDraggingOver={snapshot.isDraggingOver}
             ><p>
-              <DeleteOutlineRoundedIcon/>
+              <DeleteOutlineRoundedIcon fontSize="large"/>
             </p></div>
           )}
         </Droppable>
