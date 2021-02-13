@@ -10,10 +10,6 @@ import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd';
 const SEND_SERVICE = 0xFFE0;
 const SEND_SERVICE_CHARACTERISTIC = 0xFFE1;
 
-const array_block = [
-  1,2,3,4,5,6,7
-]
-
 const OBJ_BLOCKS = {
   [uuid()] : [],
   [uuid()] : [],
