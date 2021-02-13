@@ -269,9 +269,12 @@ function App() {
                             {...provided.dragHandleProps}
                             isDragging={snapshot.isDragging}
                             className={item.class_name} 
-                          ><p>
+                          >
                             {item.icon}
-                          </p></div>
+                            <p>
+                              {item.content}
+                            </p>
+                          </div>
                         )}
                       </Draggable>
                     )
@@ -302,9 +305,12 @@ function App() {
                         {...provided.dragHandleProps}
                         isDragging={snapshot.isDragging}
                         className={item.class_name} 
-                      ><p>
+                      >
                         {item.icon}
-                      </p></div>
+                        <p>
+                          {item.content}
+                        </p>
+                      </div>
                     </React.Fragment>
                   )}
                 </Draggable>
