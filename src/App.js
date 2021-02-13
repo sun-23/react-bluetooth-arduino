@@ -34,24 +34,28 @@ const OBJ_BLOCKS = {
 const COMMANDS = [
   {
     id: uuid(),
+    cmd:'f',
     content: 'forward',
     class_name: 'box f draggable',
     icon: <ForwardIcon fontSize="large"/>
   },
   {
     id: uuid(),
+    cmd:'l',
     content: 'left',
     class_name: 'box l draggable',
     icon: <LeftIcon fontSize="large"/>
   },
   {
     id: uuid(),
+    cmd:'r',
     content: 'right',
     class_name: 'box r draggable',
     icon: <RightIcon fontSize="large"/>
   },
   {
     id: uuid(),
+    cmd:'b',
     content: 'backward',
     class_name: 'box b draggable',
     icon: <BackwardIcon fontSize="large"/>
@@ -102,21 +106,12 @@ function App() {
     }
   }
 
-  function on(event){
+  function send01(event){
     const code = Number(event.target.dataset.code);
+    let enc = new TextEncoder(); 
     console.log(code);
     if(character){
-      character.writeValue(Uint8Array.of(code));
-    }else{
-      alert('no device connected.')
-    }
-  }
-
-  function off(event){
-    const code = Number(event.target.dataset.code);
-    console.log(code);
-    if(character){
-      character.writeValue(Uint8Array.of(code));
+      character.writeValue(enc.encode(`<${code}>`));
     }else{
       alert('no device connected.')
     }
@@ -138,26 +133,30 @@ function App() {
   function run(e) {
     e.preventDefault();
     let enc = new TextEncoder();
+    var text = '';
     console.log('run', obj_blocks);
-    // Object.keys(obj_blocks).map((list,index) => {
-    //   if(obj_blocks[list].id !== undefined){
-    //     console.log(`<${obj_blocks[list].content}>`);
-    //   } else {
-    //     console.log('<stop>');
-    //   }
-    // })
     if(character){
-      Object.keys(obj_blocks).map((list,index) => {
-        if(obj_blocks[list].id !== undefined){
-          console.log(obj_blocks[list][0].content);
-          character.writeValue(enc.encode(`<${obj_blocks[list].content}>`));
-        } else {
-          console.log('stop');
-          character.writeValue(enc.encode('<stop>'));
-        }
-      })
+        text = text + '<CODE,'
+        Object.keys(obj_blocks).map((list,index) => {
+            if(obj_blocks[list].cmd !== undefined){
+                console.log(obj_blocks[list].cmd);
+                //character.writeValue(enc.encode(`<${obj_blocks[list].content}>`));
+                text = text + obj_blocks[list].cmd + ','
+            } else {
+                console.log('s');
+                //character.writeValue(enc.encode('<stop>'));
+                text = text + 's,'
+            }
+        })
+        text = text + 'End>'
+        console.log('text',text);
+        character.writeValue(enc.encode(text)).then(() => {
+            alert('send code ok')
+        }).catch(() => {
+            alert('cannot send')
+        })
     }else{
-      alert('no device connected.')
+        alert('no device connected.')
     }
   }
 
@@ -231,9 +230,9 @@ function App() {
         <h1>device: { device ? device.name : 'no device' }</h1>
         <button onClick={() => request_device()} className='button'>connect</button>
         <button onClick={() => disconnect()} className='button'>disconnect</button>
-        <button onClick={on} data-code="1" className='button'>on</button>
-        <button onClick={off} data-code="0" className='button'>off</button>
-        {/* <form onSubmit={send_command}>
+        <button onClick={send01} data-code="1" className='button'>on</button>
+        <button onClick={send01} data-code="0" className='button'>off</button>
+        <form onSubmit={send_command}>
           <input
             type='text'
             name='command'
@@ -242,7 +241,7 @@ function App() {
             onChange={(e) => setCommand(e.target.value)}
           />
           <button type='submit' className='button'>send command</button>
-        </form> */}
+        </form>
         <div className='code'>
         {Object.keys(obj_blocks).map((list, i) => {
           return (

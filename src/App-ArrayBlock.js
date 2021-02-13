@@ -139,25 +139,28 @@ function App() {
     e.preventDefault();
     let enc = new TextEncoder();
     console.log('run', obj_blocks);
-    // Object.keys(obj_blocks).map((list,index) => {
-    //   if(obj_blocks[list][0] !== undefined){
-    //     console.log(`<${obj_blocks[list][0].content}>`);
-    //   } else {
-    //     console.log('<stop>');
-    //   }
-    // })
     if(character){
-      Object.keys(obj_blocks).map((list,index) => {
-        if(obj_blocks[list][0] !== undefined){
-          console.log(obj_blocks[list][0].content);
-          character.writeValue(enc.encode(`<${obj_blocks[list][0].content}>`));
-        } else {
-          console.log('stop');
-          character.writeValue(enc.encode('<stop>'));
-        }
-      })
+        text = text + '<CODE,'
+        Object.keys(obj_blocks).map((list,index) => {
+            if(obj_blocks[list][0].cmd !== undefined){
+                console.log(obj_blocks[list][0].cmd);
+                //character.writeValue(enc.encode(`<${obj_blocks[list].content}>`));
+                text = text + obj_blocks[list][0].cmd + ','
+            } else {
+                console.log('s');
+                //character.writeValue(enc.encode('<stop>'));
+                text = text + 's,'
+            }
+        })
+        text = text + 'End>'
+        console.log('text',text);
+        character.writeValue(enc.encode(text)).then(() => {
+            alert('send code ok')
+        }).catch(() => {
+            alert('cannot send')
+        })
     }else{
-      alert('no device connected.')
+        alert('no device connected.')
     }
   }
 
