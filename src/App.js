@@ -118,6 +118,7 @@ function App() {
 
     const characteristic = await service.getCharacteristic(SEND_SERVICE_CHARACTERISTIC).then((character) => {
         console.log("get characteristic ok");
+        console.log("device name", device.name);
         alert('connect to device!');
         return character; //ต้อง retrun ไม่งั้นจะไม่คืนค่า characteristic กลับไป
     }).catch((error) => {
