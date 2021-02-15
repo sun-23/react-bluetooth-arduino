@@ -88,8 +88,16 @@ function App() {
     const device = await navigator.bluetooth
       .requestDevice({
           filters: [{ namePrefix:'ro' },{ services: [SEND_SERVICE] },]
-      });
-   const server = await device.gatt.connect();
+      }).then(() => {
+          console.log("request device ok");
+      }).catch((error) => {
+          console.log('error cannot connect', error);
+      })
+   const server = await device.gatt.connect().then(() => {
+       console.log("connect device ok");
+   }).catch((error) => {
+       console.log("cannot connect device", error);
+   })
    const service = await server.getPrimaryService(SEND_SERVICE);
    const characteristic = await service.getCharacteristic(SEND_SERVICE_CHARACTERISTIC);
    set_characteristic(characteristic);
