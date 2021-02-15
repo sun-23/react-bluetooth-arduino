@@ -85,23 +85,48 @@ function App() {
   const [obj_blocks, set_obj_blocks] = useState(OBJ_BLOCKS);
 
   const request_device = async () => {
-    const device = await navigator.bluetooth
-      .requestDevice({
-          filters: [{ namePrefix:'ro' },{ services: [SEND_SERVICE] },]
-      }).then(() => {
-          console.log("request device ok");
-      }).catch((error) => {
-          console.log('error cannot connect', error);
-      })
-   const server = await device.gatt.connect().then(() => {
-       console.log("connect device ok");
-   }).catch((error) => {
-       console.log("cannot connect device", error);
-   })
-   const service = await server.getPrimaryService(SEND_SERVICE);
-   const characteristic = await service.getCharacteristic(SEND_SERVICE_CHARACTERISTIC);
-   set_characteristic(characteristic);
-   setDevice(device);
+    if (!navigator.bluetooth) {
+      alert('Sorry, your browser doesn\'t support Bluetooth API');
+    }
+
+    // const device = await navigator.bluetooth.requestDevice({
+    //     filters: [{ namePrefix:'robot' },{ services: [SEND_SERVICE] }]
+    // }) ถ้าไม่ใส่ then ก็จะไม่ต้องเขียน return ใส่ catch ไม่มีปัญหา
+
+    const device = await navigator.bluetooth.requestDevice({
+        filters: [{ namePrefix:'robot' },{ services: [SEND_SERVICE] }]
+    }).then((device) => {
+        console.log("request device ok", device);
+        return device; //ต้อง retrun ไม่งั้นจะไม่คืนค่า device กลับไป
+    }).catch((error) => {
+        console.log('error cannot request device', error);
+    })
+
+    const server = await device.gatt.connect().then((server) => {
+        console.log("connect device ok");
+        return server; //ต้อง retrun ไม่งั้นจะไม่คืนค่า server กลับไป
+    }).catch((error) => {
+        console.log("cannot connect device", error);
+    })
+
+    const service = await server.getPrimaryService(SEND_SERVICE).then((service) => {
+        console.log("get service ok");
+        return service; //ต้อง retrun ไม่งั้นจะไม่คืนค่า service กลับไป
+    }).catch((error) => {
+        console.log("cannot get service", error);
+    })
+
+    const characteristic = await service.getCharacteristic(SEND_SERVICE_CHARACTERISTIC).then((character) => {
+        console.log("get characteristic ok");
+        alert('connect to device!');
+        return character; //ต้อง retrun ไม่งั้นจะไม่คืนค่า characteristic กลับไป
+    }).catch((error) => {
+        console.log("cannot get characteristic", error);
+        alert('cannot connect to device!');
+    })
+
+    set_characteristic(characteristic);
+    setDevice(device);
   }
 
   async function disconnect(){
