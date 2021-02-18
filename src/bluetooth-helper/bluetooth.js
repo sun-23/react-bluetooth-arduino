@@ -92,12 +92,31 @@ const run_cmd = async (obj_blocks, characteristic) => {
         text = text + '<CODE,'
         Object.keys(obj_blocks).map((list,index) => {
             if(obj_blocks[list].cmd !== undefined){
-                console.log(obj_blocks[list].cmd);
-                //character.writeValue(enc.encode(`<${obj_blocks[list].content}>`));
-                text = text + obj_blocks[list].cmd + ','
+                if(obj_blocks[list].option == "fn"){
+                    const loop_n = obj_blocks[list].loop_n;
+                    const start_block = obj_blocks[list].start;
+                    const end_block = obj_blocks[list].end;
+                    var function_cmd = '';
+                    var function_cmd_loop = '';
+                    Object.keys(obj_blocks).map((uid, id) => {
+                      if(id >= start_block && id <= end_block){
+                        const cmd = obj_blocks[uid].cmd;
+                        function_cmd = function_cmd + ((cmd != undefined) ? cmd : 's') + ','
+                      } 
+                    })
+                    for(var i=1; i<=loop_n; i++){
+                      function_cmd_loop = function_cmd_loop + function_cmd;
+                    }
+                    console.log('func loop', function_cmd_loop);
+                    text = text + function_cmd_loop;
+                } else {
+                    console.log(obj_blocks[list].cmd);
+                    //character.writeValue(enc.encode(`<${obj_blocks[list].cmd}>`));
+                    text = text + obj_blocks[list].cmd + ','
+                }
             } else {
                 console.log('s');
-                //character.writeValue(enc.encode('<stop>'));
+                //character.writeValue(enc.encode('<s>'));
                 text = text + 's,'
             }
         })

@@ -1,5 +1,5 @@
 import React, { useState, Component } from 'react';
-import "./App.css";
+import "../css/CodeUI.css";
 import { v4 as uuid } from 'uuid';
 import styled from 'styled-components';
 import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd';

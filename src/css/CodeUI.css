@@ -49,6 +49,11 @@
   border-radius: 20px;
 }
 
+.func-input {
+  width: 20px;
+  height: 20px;
+}
+
 .code {
   display: flex;
   justify-content: space-around;
@@ -62,7 +67,7 @@
   flex-wrap: wrap;
   padding: 10px;
   border-radius: 15px;
-  background-color: cornflowerblue;
+  background-color: rgb(109, 136, 187);
   margin: 30px;
 }
 
@@ -92,12 +97,41 @@
   text-align: center;
 }
 
+.box-function {
+  width: 150px;
+  height: auto;
+  padding-bottom: 10px;
+  border-radius: 10px;
+  background: #f4f9f9;
+  text-align: center;
+  padding-top: 40px;
+}
+
+.box-function p {
+  margin: 0;
+  padding: 0;
+  color: black;
+  text-transform: uppercase;
+  font-weight: 700;
+  text-align: center;
+}
+
 .big-box {
   width: 200px;
   height: 200px;
   border-radius: 10px;
   background: #ffffff;
   margin: 20px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.flex-div {
+  display: flex;
+  justify-content: space-between;
+  padding-left: 10px;
+  padding-right: 10px;
 }
 
 .f {
@@ -114,6 +148,10 @@
 
 .b {
   background: #ffdcf7;
+}
+
+.g {
+  background: #f4f9f9;
 }
 
 .draggable {

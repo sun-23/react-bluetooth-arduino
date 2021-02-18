@@ -5,9 +5,15 @@ import styled from 'styled-components';
 import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd';
 import DeleteOutlineRoundedIcon from '@material-ui/icons/DeleteOutlineRounded';
 import LeftIcon from '@material-ui/icons/ArrowBackRounded';
+import RightIcon from '@material-ui/icons/ArrowForwardRounded';
 import BackwardIcon from '@material-ui/icons/ArrowDownwardRounded';
 import ForwardIcon from '@material-ui/icons/ArrowUpwardRounded';
-import RightIcon from '@material-ui/icons/ArrowForwardRounded';
+import RotateLeftRoundedIcon from '@material-ui/icons/RotateLeftRounded';
+import RotateRightRoundedIcon from '@material-ui/icons/RotateRightRounded';
+import CenterFocusStrongRoundedIcon from '@material-ui/icons/CenterFocusStrongRounded';
+import CenterFocusWeakRoundedIcon from '@material-ui/icons/CenterFocusWeakRounded';
+import VolumeUpRoundedIcon from '@material-ui/icons/VolumeUpRounded';
+import FunctionsRoundedIcon from '@material-ui/icons/FunctionsRounded';
 // npm install react-beautiful-dnd@10.0.4 --force
 // npm install styled-components@3.4.9 --force
 
@@ -43,14 +49,14 @@ const COMMANDS = [
     cmd:'l',
     content: 'left',
     class_name: 'box l draggable',
-    icon: <LeftIcon fontSize="large"/>
+    icon: <RotateLeftRoundedIcon fontSize="large"/>
   },
   {
     id: uuid(),
     cmd:'r',
     content: 'right',
     class_name: 'box r draggable',
-    icon: <RightIcon fontSize="large"/>
+    icon: <RotateRightRoundedIcon fontSize="large"/>
   },
   {
     id: uuid(),
@@ -58,6 +64,38 @@ const COMMANDS = [
     content: 'backward',
     class_name: 'box b draggable',
     icon: <BackwardIcon fontSize="large"/>
+  },
+  {
+    id: uuid(),
+    cmd:'g',
+    content: 'grab',
+    class_name: 'box g draggable',
+    icon: <CenterFocusStrongRoundedIcon fontSize="large"/>
+  },
+  {
+    id: uuid(),
+    cmd:'ug',
+    content: 'ungrab',
+    class_name: 'box g draggable',
+    icon: <CenterFocusWeakRoundedIcon fontSize="large"/>
+  },
+  {
+    id: uuid(),
+    cmd:'bp',
+    content: 'beep',
+    class_name: 'box g draggable',
+    icon: <VolumeUpRoundedIcon fontSize="large"/>
+  },
+  {
+    id: uuid(),
+    option: 'fn',
+    cmd: 's',
+    content: 'function',
+    class_name: 'box-function draggable',
+    loop_n: 1 ,
+    start: 1 ,
+    end: 1,
+    icon: <FunctionsRoundedIcon fontSize="large"/>
   }
 ]
 
@@ -212,7 +250,7 @@ function App() {
                   isDraggingOver={snapshot.isDraggingOver}
                 ><p>
                   {/* {list} */}
-                  {i}
+                  <p>BLOCK: {i}</p>
                   {undefined !== obj_blocks[list] && obj_blocks[list].id
                   ? (
                       <Draggable 
@@ -230,6 +268,51 @@ function App() {
                             {obj_blocks[list].icon}
                             <p>
                               {obj_blocks[list].content}
+                              {obj_blocks[list].option == 'fn' ? (
+                                <>
+                                  <div className="flex-div">
+                                    <p>do {obj_blocks[list].loop_n} times</p>
+                                    <input type='text' className='func-input' onChange={(e) => {
+                                      const value = parseInt(e.target.value) 
+                                      set_obj_blocks({
+                                        ...obj_blocks,
+                                        [list] : {
+                                          ...obj_blocks[list],
+                                          loop_n : value ? value : 1
+                                        }
+                                      })
+                                    }}/>
+                                  </div>
+                                  <div className="flex-div">
+                                    <p>start:{obj_blocks[list].start}</p>
+                                    <input type='text' className='func-input' onChange={(e) => {
+                                      const value = parseInt(e.target.value) 
+                                      set_obj_blocks({
+                                        ...obj_blocks,
+                                        [list] : {
+                                          ...obj_blocks[list],
+                                          start : value !== null && value <= 13 && value >= 0 ? value : 0
+                                        }
+                                      })
+                                    }}/>
+                                  </div>
+                                  <div className="flex-div">
+                                    <p>end:{obj_blocks[list].end}</p>
+                                    <input type='text' className='func-input' onChange={(e) => {
+                                      const value = parseInt(e.target.value) 
+                                      set_obj_blocks({
+                                        ...obj_blocks,
+                                        [list] : {
+                                          ...obj_blocks[list],
+                                          end : value !== null && value <= 13 && value >= 0 ? value : 0
+                                        }
+                                      })
+                                    }}/>
+                                  </div>
+                                </>
+                              ) : (
+                                <p></p>
+                              )}
                             </p>
                           </div>
                         )}
@@ -246,46 +329,47 @@ function App() {
 
         <div className='code-block'>
           <Droppable droppableId="ITEMS" isDropDisabled={true}>
-          {(provided, snapshot) => (
-            <div 
-              className='code-block'
-              ref={provided.innerRef}
-              isDraggingOver={snapshot.isDraggingOver}>
-              {COMMANDS.map((item, index) => (
-                <Draggable key={item.id} draggableId={item.id} index={index}>
-                  {(provided, snapshot) => (
-                    <React.Fragment>
-                      <div
-                        ref={provided.innerRef}
-                        {...provided.draggableProps}
-                        {...provided.dragHandleProps}
-                        isDragging={snapshot.isDragging}
-                        className={item.class_name} 
-                      >
-                        {item.icon}
-                        <p>
-                          {item.content}
-                        </p>
-                      </div>
-                    </React.Fragment>
-                  )}
-                </Draggable>
-              ))}
-            </div>
-          )}
-        </Droppable>
-        <button className='run-button' onClick={run}> run </button>
-        <Droppable droppableId="TRASH">
-          {(provided, snapshot) => (
-            <div 
-              className='big-box' 
-              ref={provided.innerRef}
-              isDraggingOver={snapshot.isDraggingOver}
-            ><p>
-              <DeleteOutlineRoundedIcon fontSize="large"/>
-            </p></div>
-          )}
-        </Droppable>
+            {(provided, snapshot) => (
+              <div 
+                className='code-block'
+                ref={provided.innerRef}
+                isDraggingOver={snapshot.isDraggingOver}>
+                {COMMANDS.map((item, index) => (
+                  <Draggable key={item.id} draggableId={item.id} index={index}>
+                    {(provided, snapshot) => (
+                      <React.Fragment>
+                        <div
+                          ref={provided.innerRef}
+                          {...provided.draggableProps}
+                          {...provided.dragHandleProps}
+                          isDragging={snapshot.isDragging}
+                          className={item.class_name} 
+                        >
+                          {item.icon}
+                          <p>
+                            {item.content}
+                          </p>
+                        </div>
+                      </React.Fragment>
+                    )}
+                  </Draggable>
+                ))}
+              </div>
+            )}
+          </Droppable>
+          <button className='run-button' onClick={run}> run </button>
+          <p> function cannot call in function. when call function in fucntion it run stop command.</p>
+          <Droppable droppableId="TRASH">
+            {(provided, snapshot) => (
+              <div 
+                className='big-box' 
+                ref={provided.innerRef}
+                isDraggingOver={snapshot.isDraggingOver}
+              ><p>
+                <DeleteOutlineRoundedIcon fontSize="large"/>
+              </p></div>
+            )}
+          </Droppable>
         </div>
         </div>
       </DragDropContext>
