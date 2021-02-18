@@ -1,0 +1,121 @@
+* {
+  box-sizing: border-box;
+  padding: 0;
+  margin: 0;
+}
+
+.App {
+  padding: 20px;
+  background-color: #d3e0ea;
+  font-family: Arial;
+  text-align: center;
+}
+
+.button {
+  font-size: 18px;
+  height: auto;
+  width: auto;
+  border-radius: 10px;
+  padding-top: 10px;
+  padding-bottom: 10px;
+  padding-left: 20px;
+  padding-right: 20px;
+  background: #f2f6f5;
+  text-transform: uppercase;
+  font-weight: 700;
+  margin: 30px;
+}
+
+.run-button {
+  font-size: 18px;
+  height: 60px;
+  width: 150px;
+  border-radius: 10px;
+  padding-top: 10px;
+  padding-bottom: 10px;
+  padding-left: 20px;
+  padding-right: 20px;
+  background: #ffffff;
+  text-transform: uppercase;
+  font-weight: 700;
+  margin: 30px;
+}
+
+.text-input {
+  height: 30px;
+  width: 200px;
+  padding-left: 20px;
+  padding-right: 20px;
+  border-radius: 20px;
+}
+
+.code {
+  display: flex;
+  justify-content: space-around;
+  flex-wrap: wrap;
+  margin-bottom: 40px;
+}
+
+.code-block {
+  display: flex;
+  justify-content: space-around;
+  flex-wrap: wrap;
+  padding: 10px;
+  border-radius: 15px;
+  background-color: cornflowerblue;
+  margin: 30px;
+}
+
+.box-code {
+  width: 150px;
+  height: 150px;
+  border-radius: 10px;
+  background: #ffffff;
+  margin: 20px;
+}
+
+.box {
+  width: 150px;
+  height: 150px;
+  border-radius: 10px;
+  background: #ffffff;
+  text-align: center;
+  padding-top: 40px;
+}
+
+.box p {
+  margin: 0;
+  padding: 0;
+  color: black;
+  text-transform: uppercase;
+  font-weight: 700;
+  text-align: center;
+}
+
+.big-box {
+  width: 200px;
+  height: 200px;
+  border-radius: 10px;
+  background: #ffffff;
+  margin: 20px;
+}
+
+.f {
+  background: #ffb3b3;
+}
+
+.l {
+  background: #b6ffea;
+}
+
+.r {
+  background: #fce2ae;
+}
+
+.b {
+  background: #ffdcf7;
+}
+
+.draggable {
+  cursor: move;
+}

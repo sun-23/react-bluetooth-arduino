@@ -1,0 +1,41 @@
+* {
+    box-sizing: border-box;
+    padding: 0;
+    margin: 0;
+}
+
+.App {
+    padding: 20px;
+    background-color: #d3e0ea;
+    font-family: Arial;
+    text-align: center;
+}
+
+.helper {
+    height: auto;
+    width: auto;
+    padding: 20px;
+    border-radius: 20px;
+    background-color: #ffffff;
+    margin: 20px;
+}
+
+.run-btn {
+    font-size: 18px;
+    height: 60px;
+    width: 150px;
+    border-radius: 10px;
+    padding-top: 10px;
+    padding-bottom: 10px;
+    padding-left: 20px;
+    padding-right: 20px;
+    background: #ffffff;
+    text-transform: uppercase;
+    font-weight: 700;
+    margin: 30px;
+}
+
+.editor {
+    display: flex;
+    justify-content: center;
+}
