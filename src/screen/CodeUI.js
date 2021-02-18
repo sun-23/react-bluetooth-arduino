@@ -358,7 +358,7 @@ function App() {
             )}
           </Droppable>
           <button className='run-button' onClick={run}> run </button>
-          <p> function cannot call in function. when call function in fucntion it run stop command.</p>
+          <p>!!!when call function in fucntion it run stop command.!!!</p>
           <Droppable droppableId="TRASH">
             {(provided, snapshot) => (
               <div 
