@@ -74,10 +74,11 @@ const send_command_to_device = async (characteristic, command) => {
     // Why the <opening and closing> characters?
     // Went with this guy's example 3 for the reasons he mentions: https://forum.arduino.cc/index.php?topic=396450.0
     if(characteristic){
-        characteristic.writeValue(enc.encode(`<${command}>`)).then(() => {
+        await characteristic.writeValue(enc.encode(`<${command}>`)).then(() => {
             alert('send code ok')
-        }).catch(() => {
+        }).catch((error) => {
             alert('cannot send')
+            console.log('error', error);
         })
     }else{
       alert('no device connected.')
@@ -86,47 +87,41 @@ const send_command_to_device = async (characteristic, command) => {
 
 const run_cmd = async (obj_blocks, characteristic) => {
     let enc = new TextEncoder();
-    var text = '';
+    var array_temp = [];
     console.log('run', obj_blocks);
     if(characteristic){
-        text = text + '<CODE,'
         Object.keys(obj_blocks).map((list,index) => {
             if(obj_blocks[list].cmd !== undefined){
                 if(obj_blocks[list].option == "fn"){
                     const loop_n = obj_blocks[list].loop_n;
                     const start_block = obj_blocks[list].start;
                     const end_block = obj_blocks[list].end;
-                    var function_cmd = '';
-                    var function_cmd_loop = '';
-                    Object.keys(obj_blocks).map((uid, id) => {
-                      if(id >= start_block && id <= end_block){
-                        const cmd = obj_blocks[uid].cmd;
-                        function_cmd = function_cmd + ((cmd != undefined) ? cmd : 's') + ','
-                      } 
-                    })
-                    for(var i=1; i<=loop_n; i++){
-                      function_cmd_loop = function_cmd_loop + function_cmd;
+                    for(var j=1; j<=loop_n; j++){
+                        Object.keys(obj_blocks).map((uuid, number) => {
+                            if(number >= start_block && number <= end_block){ // block in start and end number block
+                                const cmd = obj_blocks[uuid].cmd;
+                                if(cmd !== undefined){
+                                    array_temp.push(cmd);
+                                } else {
+                                    array_temp.push('s');
+                                }
+                            }
+                        })
                     }
-                    console.log('func loop', function_cmd_loop);
-                    text = text + function_cmd_loop;
                 } else {
-                    console.log(obj_blocks[list].cmd);
-                    //character.writeValue(enc.encode(`<${obj_blocks[list].cmd}>`));
-                    text = text + obj_blocks[list].cmd + ','
+                    array_temp.push(obj_blocks[list].cmd);
                 }
             } else {
-                console.log('s');
-                //character.writeValue(enc.encode('<s>'));
-                text = text + 's,'
+                array_temp.push('s');
             }
         })
-        text = text + 'End>'
-        console.log('text',text);
-        characteristic.writeValue(enc.encode(text)).then(() => {
-            alert('send code ok')
-        }).catch(() => {
-            alert('cannot send')
-        })
+        for(var m=0; m<array_temp.length; m++){
+            await characteristic.writeValue(enc.encode(`<UI,${array_temp[m]}>`)).then(() => {
+                console.log(`sent command <UI,${array_temp[m]}>`);
+            }).catch((error) => {
+                console.log('cannot send code', error);
+            })
+        }
     }else{
         alert('no device connected.')
     }

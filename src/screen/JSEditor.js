@@ -19,9 +19,9 @@ const JSEditor = () => {
         set_code(newValue);
     }
 
-    function run_code() {
+    async function run_code() {
         try {
-            eval(code);
+            await eval(code);
         } catch (e) {
             alert(e);
         }
@@ -48,50 +48,50 @@ const JSEditor = () => {
         send_01(character, event);
     }
 
-    const move_forward = (distance) => { //const name = () => {} worked with eval
+    const move_forward = async (distance) => { //const name = () => {} worked with eval
         const command = 'JS,f,'+distance
         if(character){
-            send_command_to_device(character,command);
+            await send_command_to_device(character,command);
         }
         console.log(command);
     }
 
-    const move_backward = (distance) => {
+    const move_backward = async (distance) => {
         const command = 'JS,b,'+distance
         if(character){
-            send_command_to_device(character,command);
+            await send_command_to_device(character,command);
         }
         console.log(command);
     }
 
-    const left = (degree) => {
+    const left = async (degree) => {
         const command = 'JS,l,'+degree
         if(character){
-            send_command_to_device(character,command);
+            await send_command_to_device(character,command);
         }
         console.log(command);
     }
 
-    const right = (degree) => {
+    const right = async (degree) => {
         const command = 'JS,l,'+degree
         if(character){
-            send_command_to_device(character,command);
+            await send_command_to_device(character,command);
         }
         console.log(command);
     }
 
-    const grab = () => {
+    const grab = async () => {
         const command = 'JS,g'
         if(character){
-            send_command_to_device(character,command);
+            await send_command_to_device(character,command);
         }
         console.log(command);
     }
 
-    const ungrab = () => {
+    const ungrab = async () => {
         const command = 'JS,ug'
         if(character){
-            send_command_to_device(character,command);
+            await send_command_to_device(character,command);
         }
         console.log(command);
     }
@@ -116,6 +116,23 @@ const JSEditor = () => {
                         <p>right(paramiter) ; paramiter is degree.</p>
                         <p>grab() ; grab object.</p>
                         <p>ungrab() ; ungrab object.</p>
+                        <p style={{margin: "20px"}}>
+                            When you call a function javascript in an asynchronous language, 
+                            the function does not complete a step, so it can't command the robot, 
+                            so you need to use async-await for javascript to synchronous language. 
+                            Example is
+                        </p>
+                        <p style={{ textAlign:"left", margin:"20px", display:"flex", justifyContent:"center" }}>
+                            <code>
+                                {`const myfunc = async () => {`} <br></br>
+                                {`await left(10);`} <br></br>
+                                {`await right(20);`}<br></br>
+                                {`await grab(20);`} <br></br>
+                                {`await move_forward(20);`} <br></br>
+                                {`}`} <br></br>
+                                {`myfunc(); //call myfunc function`} <br></br>
+                            </code>
+                        </p>
                     </div>
                     <button className='run-btn' onClick={request_device} >connect</button>
                     <button className='run-btn' onClick={disconnect} >disconnect</button>
