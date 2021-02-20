@@ -97,6 +97,14 @@ const JSEditor = () => {
         console.log(command);
     }
 
+    const beep = async (time) => {
+        const command = 'JS,bp,'+ String(parseInt(time) !== undefined ? parseInt(time) : 1);
+        if(character){
+            await send_command_to_device(character,command);
+        }
+        console.log(command);
+    }
+
     return(
         <div className="App">
             <h1>device: { device ? device.name : 'no device' }</h1>
@@ -118,6 +126,7 @@ const JSEditor = () => {
                         <p>right(paramiter) ; paramiter is degree.</p>
                         <p>grab() ; grab object.</p>
                         <p>ungrab() ; ungrab object.</p>
+                        <p>beep(time) ; beep. time in integer second.</p>
                         <p style={{margin: "20px"}}>
                             When you call a function javascript in an asynchronous language, 
                             the function does not complete a step, so it can't command the robot, 
