@@ -80,7 +80,7 @@ const send_command_to_device = async (characteristic, command) => {
             alert('cannot send')
             console.log('error', error);
         })
-        await delay(1000);
+        await delay(2000);
     }else{
       alert('no device connected.')
     }
@@ -130,7 +130,7 @@ const run_cmd = async (obj_blocks, characteristic) => {
             }).catch((error) => {
                 console.log('cannot send code', error);
             })
-            await delay(1000);
+            await delay(2000);
         }
     }else{
         alert('no device connected.')
