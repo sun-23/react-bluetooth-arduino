@@ -92,9 +92,9 @@ const COMMANDS = [
     cmd: 's',
     content: 'function',
     class_name: 'box-function draggable',
-    loop_n: 1 ,
-    start: 1 ,
-    end: 1,
+    loop_n: 1,
+    start: 0,
+    end: 0,
     icon: <FunctionsRoundedIcon fontSize="large"/>
   }
 ]
