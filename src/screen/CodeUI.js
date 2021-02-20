@@ -1,4 +1,6 @@
 import React, { useState, useEffect } from 'react';
+import { useRecoilState } from 'recoil';
+import { ble_device, ble_characteristic } from '../data/data';
 import "../css/CodeUI.css";
 import { v4 as uuid } from 'uuid';
 import styled from 'styled-components';
@@ -114,9 +116,8 @@ const move = (source, destination, droppableSource, droppableDestination) => {
 };
 
 function App() {
-
-  const [ character, set_characteristic] = useState();
-  const [ device , setDevice ] = useState();
+  const [ character, set_characteristic] = useRecoilState(ble_characteristic);
+  const [ device , setDevice ] = useRecoilState(ble_device);
   const [ command, setCommand ] = useState();
   const [obj_blocks, set_obj_blocks] = useState(OBJ_BLOCKS);
 

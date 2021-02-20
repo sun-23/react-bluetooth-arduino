@@ -1,4 +1,6 @@
 import React , { useState, useEffect } from "react";
+import { useRecoilState } from 'recoil';
+import { ble_device, ble_characteristic } from '../data/data';
 import AceEditor from "react-ace";
 import { request_Device, disconnect_Device, send_01, send_command_to_device, run_cmd } from '../bluetooth-helper/bluetooth.js'
 
@@ -11,9 +13,8 @@ import "../css/Editor.css"
 
 const JSEditor = () => {
     const [ code, set_code ] = useState('');
-    const [ messages, set_messages] = useState([{}]);
-    const [ character, set_characteristic] = useState();
-    const [ device , setDevice ] = useState();
+    const [ character, set_characteristic] = useRecoilState(ble_characteristic);
+    const [ device , setDevice ] = useRecoilState(ble_device);
 
     const onChange = (newValue) => {
         console.log("change", newValue);
