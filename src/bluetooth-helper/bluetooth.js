@@ -75,7 +75,7 @@ const send_command_to_device = async (characteristic, command) => {
     // Went with this guy's example 3 for the reasons he mentions: https://forum.arduino.cc/index.php?topic=396450.0
     if(characteristic){
         await characteristic.writeValue(enc.encode(`<${command}>`)).then(() => {
-            alert('send code ok')
+            console.log('send code ok');
         }).catch((error) => {
             alert('cannot send')
             console.log('error', error);

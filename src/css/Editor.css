@@ -24,7 +24,7 @@
 .run-btn {
     font-size: 18px;
     height: 60px;
-    width: 150px;
+    width: auto;
     border-radius: 10px;
     padding-top: 10px;
     padding-bottom: 10px;

@@ -1,4 +1,4 @@
-import React , { useState } from "react";
+import React , { useState, useEffect } from "react";
 import AceEditor from "react-ace";
 import { request_Device, disconnect_Device, send_01, send_command_to_device, run_cmd } from '../bluetooth-helper/bluetooth.js'
 
@@ -10,16 +10,17 @@ import "ace-builds/src-noconflict/snippets/javascript";
 import "../css/Editor.css"
 
 const JSEditor = () => {
-    const [ code, set_code ] = useState('')
+    const [ code, set_code ] = useState('');
+    const [ messages, set_messages] = useState([{}]);
     const [ character, set_characteristic] = useState();
     const [ device , setDevice ] = useState();
 
-    function onChange(newValue) {
+    const onChange = (newValue) => {
         console.log("change", newValue);
         set_code(newValue);
     }
 
-    async function run_code() {
+    const run_code = async () => {
         try {
             await eval(code);
         } catch (e) {
@@ -37,13 +38,13 @@ const JSEditor = () => {
         }
     }
 
-    async function disconnect(){
+    const disconnect = async () => {
         disconnect_Device(device);
         setDevice();
         set_characteristic();
     }
 
-    function send01(event){
+    const send01 = (event) => {
         event.preventDefault();
         send_01(character, event);
     }
@@ -104,6 +105,7 @@ const JSEditor = () => {
                     mode="javascript"
                     theme="xcode"
                     onChange={onChange}
+                    value={code}
                     name="UNIQUE_ID_OF_DIV"
                     editorProps={{ $blockScrolling: true }}
                 />
@@ -134,11 +136,11 @@ const JSEditor = () => {
                             </code>
                         </p>
                     </div>
-                    <button className='run-btn' onClick={request_device} >connect</button>
-                    <button className='run-btn' onClick={disconnect} >disconnect</button>
-                    <button className='run-btn' onClick={send01} data-code="1" >on led</button>
-                    <button className='run-btn' onClick={send01} data-code="0" >off led</button>
-                    <button className='run-btn' onClick={run_code} >run</button>
+                    <button className='run-btn' onClick={request_device}>connect</button>
+                    <button className='run-btn' onClick={disconnect}>disconnect</button>
+                    <button className='run-btn' onClick={send01} data-code="1">on led</button>
+                    <button className='run-btn' onClick={send01} data-code="0">off led</button>
+                    <button className='run-btn' onClick={run_code}>run</button>
                 </div>
             </div>
         </div>

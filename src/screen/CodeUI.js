@@ -1,4 +1,4 @@
-import React, { useState, Component } from 'react';
+import React, { useState, useEffect } from 'react';
 import "../css/CodeUI.css";
 import { v4 as uuid } from 'uuid';
 import styled from 'styled-components';
@@ -118,7 +118,6 @@ function App() {
   const [ character, set_characteristic] = useState();
   const [ device , setDevice ] = useState();
   const [ command, setCommand ] = useState();
-
   const [obj_blocks, set_obj_blocks] = useState(OBJ_BLOCKS);
 
   const request_device = async () => {
