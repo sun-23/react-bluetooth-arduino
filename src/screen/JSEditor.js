@@ -2,7 +2,7 @@ import React , { useState, useEffect } from "react";
 import { useRecoilState } from 'recoil';
 import { ble_device, ble_characteristic } from '../data/data';
 import AceEditor from "react-ace";
-import { request_Device, disconnect_Device, send_01, send_command_to_device, run_cmd } from '../bluetooth-helper/bluetooth.js'
+import { request_Device, disconnect_Device, send_01, send_command_to_device } from '../bluetooth-helper/bluetooth.js'
 
 import "ace-builds/src-min-noconflict/ext-language_tools";
 import "ace-builds/src-noconflict/mode-javascript";
@@ -136,6 +136,9 @@ const JSEditor = () => {
                         </p>
                         <p style={{ textAlign:"left", margin:"20px", display:"flex", justifyContent:"center" }}>
                             <code>
+                                ================================================ <br></br>
+                                //example 1. call 1 function
+                                <br></br>
                                 {`const myfunc = async () => {`} <br></br>
                                 {`await left(10);`} <br></br>
                                 {`await right(20);`}<br></br>
@@ -143,6 +146,30 @@ const JSEditor = () => {
                                 {`await move_forward(20);`} <br></br>
                                 {`}`} <br></br>
                                 {`myfunc(); //call myfunc function`} <br></br>
+                                <br></br>
+                                ================================================ <br></br>
+                                //example 2. call 2 function
+                                <br></br>
+                                {`const myfunc2 = async () => {`} <br></br>
+                                {`await left(10);`} <br></br>
+                                {`await right(20);`}<br></br>
+                                {`await grab(20);`} <br></br>
+                                {`await move_forward(20);`} <br></br>
+                                {`}`} <br></br>
+                                {''} <br></br>
+                                {`const myfunc3 = async () => {`} <br></br>
+                                {`await left(10);`} <br></br>
+                                {`await right(20);`}<br></br>
+                                {`await grab(20);`} <br></br>
+                                {`await move_forward(20);`} <br></br>
+                                {`}`} <br></br>
+                                {''} <br></br>
+                                {`const call_2function = async () => {`} <br></br>
+                                {`await myfunc2(); //call myfunc function`} <br></br>
+                                {`await myfunc3(); //call myfunc function`} <br></br>
+                                {`}`} <br></br>
+                                {`call_2function(); //call myfunc function`} <br></br>
+
                             </code>
                         </p>
                     </div>

@@ -137,4 +137,4 @@ const run_cmd = async (obj_blocks, characteristic) => {
     }
 }
 
-export { request_Device, disconnect_Device, send_01, send_command_to_device, run_cmd }
+export { request_Device, disconnect_Device, send_01, send_command_to_device, run_cmd, delay }
