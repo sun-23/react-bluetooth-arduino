@@ -119,6 +119,11 @@ const JSEditor = () => {
                     editorProps={{ $blockScrolling: true }}
                 />
                 <div>
+                    <button className='run-btn' onClick={request_device}>connect</button>
+                    <button className='run-btn' onClick={disconnect}>disconnect</button>
+                    <button className='run-btn' onClick={send01} data-code="1">on led</button>
+                    <button className='run-btn' onClick={send01} data-code="0">off led</button>
+                    <button className='run-btn' onClick={run_code}>run</button>
                     <div className="helper">
                         <p>function robot</p>
                         <p>move_forward(paramiter) ; paramiter is distance in mm.</p>
@@ -173,11 +178,6 @@ const JSEditor = () => {
                             </code>
                         </p>
                     </div>
-                    <button className='run-btn' onClick={request_device}>connect</button>
-                    <button className='run-btn' onClick={disconnect}>disconnect</button>
-                    <button className='run-btn' onClick={send01} data-code="1">on led</button>
-                    <button className='run-btn' onClick={send01} data-code="0">off led</button>
-                    <button className='run-btn' onClick={run_code}>run</button>
                 </div>
             </div>
         </div>
