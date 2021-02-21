@@ -40,6 +40,9 @@ const toolbox = [
         type: 'call_async_function'
       },
       {
+        type: 'call_function'
+      },
+      {
         type: 'await'
       },
       {

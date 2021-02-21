@@ -92,14 +92,32 @@ Blockly.Blocks['call_async_function'] = {
             .appendField("call async function")
             .appendField(new Blockly.FieldTextInput("Function_Name"), "Name");
         this.setColour('#eb596e');
-        this.setNextStatement(true, 'Action');
-        this.setPreviousStatement(true, 'Action');
+        this.setOutput(true, "String");
+        // this.setNextStatement(true, 'Action');
+        // this.setPreviousStatement(true, 'Action');
     }
 };
 
 Blockly.JavaScript['call_async_function'] = function (block) {
     var text_name = block.getFieldValue('Name');
-    var code = text_name + '(); \n';
+    var code = text_name + '()';
+    return [code, Blockly.JavaScript.ORDER_NONE];
+};
+
+Blockly.Blocks['call_function'] = {
+    init: function () {
+        this.appendDummyInput()
+            .appendField("call async function")
+            .appendField(new Blockly.FieldTextInput("Function_Name"), "Name");
+        this.setColour('#eb596e');
+        this.setNextStatement(true, 'Action');
+        this.setPreviousStatement(true, 'Action');
+    }
+};
+
+Blockly.JavaScript['call_function'] = function (block) {
+    var text_name = block.getFieldValue('Name');
+    var code = text_name + '() \n';
     return code;
 };
 
