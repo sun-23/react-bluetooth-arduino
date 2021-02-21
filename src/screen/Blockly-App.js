@@ -10,6 +10,7 @@ import parseWorkspaceXml from '../Blockly-component/BlocklyHelper';
 import "../css/Blockly.css";
 import "../css/Editor.css"
 import "../Blockly-component/costum-block.js";
+import example_img from "../Blockly_example.png"
 
 import { request_Device, disconnect_Device, send_01, send_command_to_device, delay } from '../bluetooth-helper/bluetooth.js'
 import { useRecoilState } from 'recoil';
@@ -187,6 +188,8 @@ const Blocky_App = () => {
       <pre id="generated-xml">
       </pre>
       <textarea id="code" style={{height: "200px;", width: "800px;"}} value=""></textarea> */}
+      <p>example.</p>
+      <img src={example_img} alt="example 1" style={{ height: "auto", width: "400px" }}></img>
     </div>
   )
 }
