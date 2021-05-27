@@ -100,7 +100,7 @@ const run_cmd = async (obj_blocks, characteristic) => {
     console.log('run', obj_blocks);
     if(characteristic){
         Object.keys(obj_blocks).map((list,index) => {
-            if(obj_blocks[list].cmd !== undefined){ // if blocks not empty
+            if(obj_blocks[list].cmd !== undefined){ // if block not empty
                 if(obj_blocks[list].option == "fn"){
                     const loop_n = obj_blocks[list].loop_n;
                     const start_block = obj_blocks[list].start;
@@ -121,7 +121,7 @@ const run_cmd = async (obj_blocks, characteristic) => {
                     array_temp.push(obj_blocks[list].cmd);
                 }
             } else {
-                array_temp.push('s');
+                array_temp.push('s'); // if block empty put stop block
             }
         })
         for(var m=0; m<array_temp.length; m++){

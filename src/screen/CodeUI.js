@@ -176,32 +176,32 @@ function App() {
     console.log('==> source in log', soc.droppableId);
 
     switch (source.droppableId) {
-      case 'ITEMS':
-        if(dest.droppableId !== "TRASH"){
+      case 'ITEMS': // if drag from item command list
+        if(dest.droppableId !== "TRASH"){ // if drop destination not trash
           console.log('copy');
           const item = COMMANDS[source.index] 
           const copy_item = {...item, ["id"]: uuid()} //copy
           set_obj_blocks({
             ...obj_blocks,
-            [dest.droppableId]: copy_item
+            [dest.droppableId]: copy_item // drop to key(dest.droppableId) of droppable obj_blocks
           })
           console.log('item ', item);
           console.log('new item ',copy_item);
         } else {
-          console.log('not copy');
+          console.log('not copy'); // drag to trash
         }
         break;
       default:
-        if(dest.droppableId !== "TRASH"){
+        if(dest.droppableId !== "TRASH"){ // if drop destination not trash
           console.log('move');
           const soc_id = soc.droppableId
-          const move_item = obj_blocks[soc_id]
+          const move_item = obj_blocks[soc_id] // get cmd block in key(soc_id) of droppable obj_blocks
           console.log('soc id', soc_id);
           console.log('dest ', move_item);
           set_obj_blocks({
             ...obj_blocks,
-            [soc.droppableId] : [],
-            [dest.droppableId] : move_item
+            [soc.droppableId] : [], // source empty
+            [dest.droppableId] : move_item // fill dest
           })
           // const result = move(obj_blocks[soc.droppableId],obj_blocks[dest.droppableId],soc,dest)
           // console.log(result);
@@ -249,12 +249,12 @@ function App() {
                   ref={provided.innerRef}
                   isDraggingOver={snapshot.isDraggingOver}
                 ><p>
-                  {/* {list} */}
+                  {/* {list} uuid of droppable block in obj_blocks*/}
                   <p>BLOCK: {i}</p>
-                  {undefined !== obj_blocks[list] && obj_blocks[list].id
+                  {undefined !== obj_blocks[list] && obj_blocks[list].id // if have command block in droppable block
                   ? (
                       <Draggable 
-                        key={obj_blocks[list].id}
+                        key={obj_blocks[list].id} // command block of key(list) in droppable obj_block 
                         draggableId={obj_blocks[list].id}
                         index={0}>
                         {(provided, snapshot) => (
@@ -268,12 +268,12 @@ function App() {
                             {obj_blocks[list].icon}
                             <p>
                               {obj_blocks[list].content}
-                              {obj_blocks[list].option == 'fn' ? (
+                              {obj_blocks[list].option == 'fn' ? ( // if command block is function
                                 <>
                                   <div className="flex-div">
                                     <p>do {obj_blocks[list].loop_n} times</p>
                                     <input type='text' className='func-input' onChange={(e) => {
-                                      const value = parseInt(e.target.value) 
+                                      const value = parseInt(e.target.value) // set loop
                                       set_obj_blocks({
                                         ...obj_blocks,
                                         [list] : {
@@ -286,7 +286,7 @@ function App() {
                                   <div className="flex-div">
                                     <p>start:{obj_blocks[list].start}</p>
                                     <input type='text' className='func-input' onChange={(e) => {
-                                      const value = parseInt(e.target.value) 
+                                      const value = parseInt(e.target.value) // set start
                                       set_obj_blocks({
                                         ...obj_blocks,
                                         [list] : {
@@ -299,7 +299,7 @@ function App() {
                                   <div className="flex-div">
                                     <p>end:{obj_blocks[list].end}</p>
                                     <input type='text' className='func-input' onChange={(e) => {
-                                      const value = parseInt(e.target.value) 
+                                      const value = parseInt(e.target.value) // set end
                                       set_obj_blocks({
                                         ...obj_blocks,
                                         [list] : {
@@ -318,7 +318,7 @@ function App() {
                         )}
                       </Draggable>
                   ) : !provided.placeholder && (
-                    <p> Default stop block </p>
+                    <p> Default stop block </p> // not have command block in droppable block
                   )}
                 </p></div>
               )}
@@ -328,13 +328,13 @@ function App() {
         </div>
 
         <div className='code-block'>
-          <Droppable droppableId="ITEMS" isDropDisabled={true}>
-            {(provided, snapshot) => (
+          <Droppable droppableId="ITEMS" isDropDisabled={true}> 
+            {(provided, snapshot) => ( // show item command can drag to droppable obj_blocks
               <div 
                 className='code-block'
                 ref={provided.innerRef}
                 isDraggingOver={snapshot.isDraggingOver}>
-                {COMMANDS.map((item, index) => (
+                {COMMANDS.map((item, index) => ( // map command
                   <Draggable key={item.id} draggableId={item.id} index={index}>
                     {(provided, snapshot) => (
                       <React.Fragment>
@@ -360,7 +360,7 @@ function App() {
           <button className='run-button' onClick={run}> run </button>
           <p>!!!when call function in fucntion it run stop command.!!!</p>
           <Droppable droppableId="TRASH">
-            {(provided, snapshot) => (
+            {(provided, snapshot) => ( // trash
               <div 
                 className='big-box' 
                 ref={provided.innerRef}
