@@ -100,7 +100,7 @@ const run_cmd = async (obj_blocks, characteristic) => {
     console.log('run', obj_blocks);
     if(characteristic){
         Object.keys(obj_blocks).map((list,index) => {
-            if(obj_blocks[list].cmd !== undefined){
+            if(obj_blocks[list].cmd !== undefined){ // if blocks not empty
                 if(obj_blocks[list].option == "fn"){
                     const loop_n = obj_blocks[list].loop_n;
                     const start_block = obj_blocks[list].start;
